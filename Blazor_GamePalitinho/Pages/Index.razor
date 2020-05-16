@@ -1,0 +1,98 @@
+﻿@page "/"
+
+<h1>PalitinManiacs!</h1>
+@if (end == false)
+{
+<div>
+    @if (flag == false)
+    {
+        <h3>Com quantos Palitos deseja jogar? </h3>
+        <input id="QtdPalitos" type="number" max="30" min="20" @bind="qtdPalitos"  onkeydown="return false" hidden="@flag" />
+        <input id="StartButton" type="button" value="Iniciar" @onclick="StartGame" hidden="@flag" />
+    }   
+        <h3>Quantos palitos deseja retirar?</h3>
+        <input id="QtdPalitosRetirar" type="number" max="3" min="1" onkeydown="return false" @bind="qtdPalitosaRetirar" />
+        <input id="ButtonJogar" type="submit" value="Retirar" @onclick="RetiraPalito"/>
+        <input id="Reset1" type="reset" value="Reset" />
+    
+</div>
+<br />
+<div>
+    @*<h5>Player Retirou @qtdPalitosaRetirar Palitos!</h5>*@
+    <h4>O PC retirou @jogada  palitos.</h4>
+    <h2>Restam @qtdPalitos!!!</h2>
+    <p>@msg</p>
+</div>
+}
+else
+{
+    <h1>Cabo</h1>
+}
+
+
+@code
+{
+    private int qtdPalitos = 20;
+    private int qtdPalitosaRetirar = 1;
+    private int jogada;
+    private bool flag = false;
+    private string msg;
+    private bool end = false;
+
+    public void StartGame()
+    {
+        if (qtdPalitos > 0)
+        {
+            flag = true;
+        }
+        else
+        {
+            flag = false;
+        }
+
+    }
+
+
+    public void RetiraPalito()
+    {
+        //Player
+        if (qtdPalitos > 0)
+        {
+            qtdPalitos -= qtdPalitosaRetirar;
+
+        }
+        else
+        {
+            msg = "O Você venceu!";
+        }
+
+        //PC
+        if (qtdPalitos > 0 && qtdPalitos != 2)
+        {
+            //flag = false;
+            Random jogadaPc = new Random();
+            jogada = jogadaPc.Next(1, 4);
+            qtdPalitos -= jogada;
+
+            if (qtdPalitos > 0 && qtdPalitos != 1)
+            {
+                msg = "Proxima Jogada!";
+
+            }
+            else
+            {
+                end = true;
+                msg = "Você Venceu!";
+
+            }
+        }
+        else
+        {
+            jogada = 1;
+            qtdPalitos -= jogada;
+            msg = "Voce Perdeu";
+        }
+
+    }
+
+}
